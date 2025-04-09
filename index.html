@@ -35,47 +35,110 @@
         .floating-btn i.fa-envelope {
             color: #60a5fa; /* Blue for email icon */
         }
+        /* Mobile Navbar Styles */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: -250px; /* Initially hidden off-screen */
+            width: 250px;
+            height: 100%;
+            background-color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 60;
+            transition: transform 0.3s ease-in-out;
+            padding-top: 60px; /* Adjust based on your top navbar height */
+        }
+        .mobile-nav.open {
+            transform: translateX(250px);
+        }
+        .mobile-nav a {
+            display: block;
+            padding: 10px 20px;
+            color: #374151;
+            text-decoration: none;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .mobile-nav a:hover {
+            background-color: #f3f4f6;
+        }
+        .mobile-nav .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: #4b5563;
+            cursor: pointer;
+        }
+        /* Overlay for when mobile nav is open */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 55;
+            display: none;
+        }
+        .overlay.active {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation Bar (Locked) -->
     <nav class="bg-white shadow fixed-navbar">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-8">
-                    <a href="#" class="flex-shrink-0">
-                        <img src="https://kormikotabandungcom.b-cdn.net/2022/05/logo-kormi-kota-bandung.png" 
-                             alt="Site Logo" 
-                             class="w-[240px] h-[60px] object-contain">
-                    </a>
-                    <div class="flex space-x-8">
-                        <a href="#" class="text-gray-700 hover:text-blue-500">Home</a>
-                        <a href="#" class="text-gray-700 hover:text-blue-500">Tentang Kami</a>
-                        <a href="#" class="text-gray-700 hover:text-blue-500">Media</a>
-                        <a href="#" class="text-blue-500 font-medium">INORGA</a>
-                        <a href="#" class="text-gray-700 hover:text-blue-500">Artikel</a>
-                        <a href="#" class="text-gray-700 hover:text-blue-500">Kontak</a>
-                    </div>
+                <a href="#" class="flex-shrink-0">
+                    <img src="https://kormikotabandungcom.b-cdn.net/2022/05/logo-kormi-kota-bandung.png"
+                         alt="Site Logo"
+                         class="w-[180px] h-[48px] object-contain">
+                </a>
+
+                <button id="menuToggle" class="md:hidden text-gray-700 text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div id="navLinks" class="hidden md:flex flex-col md:flex-row md:space-x-8 space-y-2 md:space-y-0 mt-4 md:mt-0 text-center w-full md:w-auto">
+                    <a href="#" class="text-gray-700 hover:text-blue-500">Home</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-500">Tentang Kami</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-500">Media</a>
+                    <a href="#" class="text-blue-500 font-medium">INORGA</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-500">Artikel</a>
+                    <a href="#" class="text-gray-700 hover:text-blue-500">Kontak</a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <div id="mobileNav" class="mobile-nav">
+        <div id="mobileNavLinks" class="mt-6">
+            <a href="#">Home</a>
+            <a href="#">Tentang Kami</a>
+            <a href="#">Media</a>
+            <a href="#" class="font-medium text-blue-500">INORGA</a>
+            <a href="#">Artikel</a>
+            <a href="#">Kontak</a>
+        </div>
+        <button id="closeMenu" class="close-button focus:outline-none">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+
+
     <div class="container mx-auto p-4 pt-24">
-        <!-- Page Header (Centered Vertically) -->
         <div class="flex flex-col items-start justify-center min-h-[100px]">
-            <!-- Adjust the min-h-[150px] value to change the vertical space around the title/subtitle -->
             <h1 class="text-3xl font-bold mb-2">Ketahui INORGA</h1>
             <p class="text-gray-600">Ketahui INORGA OKB (Organisasi Keolahragaan di Bawah KORMI) dan OKTB (Organisasi Keolahragaan Tidak di Bawah KORMI) lebih lanjut!</p>
         </div>
 
-        <!-- Main Content -->
         <div class="flex flex-col md:flex-row gap-6">
-            <!-- Left Side - Organization List -->
             <div class="w-full md:w-1/3 bg-white rounded-lg shadow overflow-hidden flex flex-col">
                 <div class="p-4 border-b border-gray-200">
                     <div class="relative">
-                        <input type="text" id="searchInput" placeholder="Search organizations..." 
+                        <input type="text" id="searchInput" placeholder="Search organizations..."
                                class="w-full p-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
                     </div>
@@ -86,11 +149,9 @@
                     <button id="categoryOKTB" class="px-6 py-3 rounded-lg font-medium bg-gray-200">OKTB</button>
                 </div>
                 <div id="orgList" class="flex-1 overflow-y-auto" style="max-height: calc(100vh - 300px);">
-                    <!-- Organization cards will be inserted here by JavaScript -->
-                </div>
+                    </div>
             </div>
 
-            <!-- Right Side - Organization Details (Scrollable) -->
             <div class="w-full md:w-2/3 bg-white rounded-lg shadow overflow-hidden">
                 <div id="orgDetails" class="p-6 scrollable-details relative">
                     <div class="text-center py-20 text-gray-400">
@@ -181,16 +242,21 @@
                 }
             ]
         };
-    
+
         const orgList = document.getElementById('orgList');
         const orgDetails = document.getElementById('orgDetails');
         const searchInput = document.getElementById('searchInput');
         const categoryAll = document.getElementById('categoryAll');
         const categoryOKB = document.getElementById('categoryOKB');
         const categoryOKTB = document.getElementById('categoryOKTB');
-    
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const closeMenu = document.getElementById('closeMenu');
+        const overlay = document.getElementById('overlay');
+        const navLinks = document.getElementById('navLinks'); // Original nav links
+
         let currentCategory = 'all';
-    
+
         function renderOrgList(category, searchTerm = '') {
             orgList.innerHTML = '';
             let filteredOrgs = [];
@@ -199,11 +265,11 @@
             } else {
                 filteredOrgs = organizations[category];
             }
-            filteredOrgs = filteredOrgs.filter(org => 
-                org.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            filteredOrgs = filteredOrgs.filter(org =>
+                org.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 org.abbreviation.toLowerCase().includes(searchTerm.toLowerCase())
             );
-    
+
             filteredOrgs.forEach(org => {
                 const orgCard = document.createElement('div');
                 orgCard.className = 'p-4 border-b border-gray-200 org-card';
@@ -220,7 +286,7 @@
                 orgList.appendChild(orgCard);
             });
         }
-    
+
         function showOrgDetails(org) {
             orgDetails.innerHTML = `
                 <div class="mb-6">
@@ -229,7 +295,7 @@
                 <h2 class="text-2xl font-bold mb-2">${org.name}</h2>
                 <p class="text-gray-700 mb-20">${org.description}</p>
                 <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-10">
-                    <button class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 
+                    <button class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700
                                   text-white px-8 py-3 rounded-full floating-btn flex items-center transition-all duration-300
                                   hover:shadow-lg">
                         <i class="fas fa-phone-alt mr-2 text-green-300"></i>
@@ -239,7 +305,7 @@
                 </div>
             `;
         }
-    
+
         function setActiveCategory(activeBtn, ...inactiveBtns) {
             activeBtn.classList.add('active-category');
             activeBtn.classList.remove('bg-gray-200');
@@ -255,26 +321,44 @@
                 </div>
             `;
         }
-    
+
         categoryAll.addEventListener('click', () => {
             currentCategory = 'all';
             setActiveCategory(categoryAll, categoryOKB, categoryOKTB);
         });
-    
+
         categoryOKB.addEventListener('click', () => {
             currentCategory = 'categoryOKB';
             setActiveCategory(categoryOKB, categoryAll, categoryOKTB);
         });
-    
+
         categoryOKTB.addEventListener('click', () => {
             currentCategory = 'categoryOKTB';
             setActiveCategory(categoryOKTB, categoryAll, categoryOKB);
         });
-    
+
         searchInput.addEventListener('input', (e) => {
             renderOrgList(currentCategory, e.target.value);
         });
-    
+
+        menuToggle.addEventListener('click', function () {
+            mobileNav.classList.add('open');
+            overlay.classList.add('active');
+            document.body.classList.add('overflow-hidden'); // Prevent scrolling of the main body
+        });
+
+        closeMenu.addEventListener('click', function () {
+            mobileNav.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.classList.remove('overflow-hidden');
+        });
+
+        overlay.addEventListener('click', function () {
+            mobileNav.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.classList.remove('overflow-hidden');
+        });
+
         renderOrgList(currentCategory);
     </script>
 </body>
