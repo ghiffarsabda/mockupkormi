@@ -30,23 +30,22 @@
             overflow-y: auto;
         }
         .floating-btn i.fa-phone-alt {
-            color: #34d399; /* Green for phone icon */
+            color: #34d399;
         }
         .floating-btn i.fa-envelope {
-            color: #60a5fa; /* Blue for email icon */
+            color: #60a5fa;
         }
-        /* Mobile Navbar Styles */
         .mobile-nav {
             position: fixed;
             top: 0;
-            left: -250px; /* Initially hidden off-screen */
+            left: -250px;
             width: 250px;
             height: 100%;
             background-color: white;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             z-index: 60;
             transition: transform 0.3s ease-in-out;
-            padding-top: 60px; /* Adjust based on your top navbar height */
+            padding-top: 60px;
         }
         .mobile-nav.open {
             transform: translateX(250px);
@@ -69,7 +68,6 @@
             color: #4b5563;
             cursor: pointer;
         }
-        /* Overlay for when mobile nav is open */
         .overlay {
             position: fixed;
             top: 0;
@@ -83,6 +81,60 @@
         .overlay.active {
             display: block;
         }
+        /* Modal Styles */
+        #modalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 70;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        #modalOverlay.active {
+            display: flex;
+        }
+        #modalContent {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 8px;
+            position: relative;
+            padding: 1rem;
+        }
+        #modalClose {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: #4b5563;
+            cursor: pointer;
+            z-index: 10; /* Ensure close button is above content */
+        }
+        #modalDetails {
+            padding-top: 2rem; /* Add space for close button */
+        }
+        #modalDetails .floating-btn-container {
+            position: sticky;
+            bottom: 1rem;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        @media (max-width: 767px) {
+            #orgDetails {
+                display: none;
+            }
+        }
+        @media (min-width: 768px) {
+            #modalOverlay {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -94,11 +146,9 @@
                          alt="Site Logo"
                          class="w-[180px] h-[48px] object-contain">
                 </a>
-
                 <button id="menuToggle" class="md:hidden text-gray-700 text-2xl focus:outline-none">
                     <i class="fas fa-bars"></i>
                 </button>
-
                 <div id="navLinks" class="hidden md:flex flex-col md:flex-row md:space-x-8 space-y-2 md:space-y-0 mt-4 md:mt-0 text-center w-full md:w-auto">
                     <a href="#" class="text-gray-700 hover:text-blue-500">Home</a>
                     <a href="#" class="text-gray-700 hover:text-blue-500">Tentang Kami</a>
@@ -127,7 +177,6 @@
 
     <div id="overlay" class="overlay"></div>
 
-
     <div class="container mx-auto p-4 pt-24">
         <div class="flex flex-col items-start justify-center min-h-[100px]">
             <h1 class="text-3xl font-bold mb-2">Ketahui INORGA</h1>
@@ -148,8 +197,7 @@
                     <button id="categoryOKB" class="px-6 py-3 rounded-lg font-medium bg-gray-200">OKB</button>
                     <button id="categoryOKTB" class="px-6 py-3 rounded-lg font-medium bg-gray-200">OKTB</button>
                 </div>
-                <div id="orgList" class="flex-1 overflow-y-auto" style="max-height: calc(100vh - 300px);">
-                    </div>
+                <div id="orgList" class="flex-1 overflow-y-auto" style="max-height: calc(100vh - 300px);"></div>
             </div>
 
             <div class="w-full md:w-2/3 bg-white rounded-lg shadow overflow-hidden">
@@ -160,6 +208,16 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal for Mobile View -->
+    <div id="modalOverlay">
+        <div id="modalContent">
+            <button id="modalClose" class="close-button focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modalDetails" class="relative"></div>
         </div>
     </div>
 
@@ -245,6 +303,9 @@
 
         const orgList = document.getElementById('orgList');
         const orgDetails = document.getElementById('orgDetails');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalDetails = document.getElementById('modalDetails');
+        const modalClose = document.getElementById('modalClose');
         const searchInput = document.getElementById('searchInput');
         const categoryAll = document.getElementById('categoryAll');
         const categoryOKB = document.getElementById('categoryOKB');
@@ -253,7 +314,6 @@
         const mobileNav = document.getElementById('mobileNav');
         const closeMenu = document.getElementById('closeMenu');
         const overlay = document.getElementById('overlay');
-        const navLinks = document.getElementById('navLinks'); // Original nav links
 
         let currentCategory = 'all';
 
@@ -288,7 +348,7 @@
         }
 
         function showOrgDetails(org) {
-            orgDetails.innerHTML = `
+            const desktopHTML = `
                 <div class="mb-6">
                     <img src="${org.detailImage}" alt="${org.name} detail" class="w-full aspect-[21/9] object-cover rounded-lg">
                 </div>
@@ -304,6 +364,33 @@
                     </button>
                 </div>
             `;
+            
+            const mobileHTML = `
+                <div class="mb-6">
+                    <img src="${org.detailImage}" alt="${org.name} detail" class="w-full aspect-[21/9] object-cover rounded-lg">
+                </div>
+                <h2 class="text-2xl font-bold mb-2">${org.name}</h2>
+                <p class="text-gray-700 mb-20">${org.description}</p>
+                <div class="floating-btn-container">
+                    <button class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700
+                                  text-white px-8 py-3 rounded-full floating-btn flex items-center transition-all duration-300
+                                  hover:shadow-lg mx-auto">
+                        <i class="fas fa-phone-alt mr-2 text-green-300"></i>
+                        <i class="fas fa-envelope mr-2 text-blue-200"></i>
+                        Contact ${org.abbreviation}
+                    </button>
+                </div>
+            `;
+            
+            if (window.innerWidth < 768) {
+                // Show modal on mobile
+                modalDetails.innerHTML = mobileHTML;
+                modalOverlay.classList.add('active');
+                document.body.classList.add('overflow-hidden');
+            } else {
+                // Show in regular details panel on desktop
+                orgDetails.innerHTML = desktopHTML;
+            }
         }
 
         function setActiveCategory(activeBtn, ...inactiveBtns) {
@@ -314,12 +401,14 @@
                 btn.classList.add('bg-gray-200');
             });
             renderOrgList(currentCategory);
-            orgDetails.innerHTML = `
-                <div class="text-center py-20 text-gray-400">
-                    <i class="fas fa-building text-5xl mb-4"></i>
-                    <p>Select an organization to view details</p>
-                </div>
-            `;
+            if (window.innerWidth >= 768) {
+                orgDetails.innerHTML = `
+                    <div class="text-center py-20 text-gray-400">
+                        <i class="fas fa-building text-5xl mb-4"></i>
+                        <p>Select an organization to view details</p>
+                    </div>
+                `;
+            }
         }
 
         categoryAll.addEventListener('click', () => {
@@ -344,7 +433,7 @@
         menuToggle.addEventListener('click', function () {
             mobileNav.classList.add('open');
             overlay.classList.add('active');
-            document.body.classList.add('overflow-hidden'); // Prevent scrolling of the main body
+            document.body.classList.add('overflow-hidden');
         });
 
         closeMenu.addEventListener('click', function () {
@@ -357,6 +446,18 @@
             mobileNav.classList.remove('open');
             overlay.classList.remove('active');
             document.body.classList.remove('overflow-hidden');
+        });
+
+        modalClose.addEventListener('click', function () {
+            modalOverlay.classList.remove('active');
+            document.body.classList.remove('overflow-hidden');
+        });
+
+        modalOverlay.addEventListener('click', function (e) {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+                document.body.classList.remove('overflow-hidden');
+            }
         });
 
         renderOrgList(currentCategory);
