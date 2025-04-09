@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Directory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .org-card:hover {
+            background-color: #f3f4f6;
+            cursor: pointer;
+        }
+        .active-category {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .floating-btn {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .fixed-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+        }
+        .scrollable-details {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+        .floating-btn i.fa-phone-alt {
+            color: #34d399; /* Green for phone icon */
+        }
+        .floating-btn i.fa-envelope {
+            color: #60a5fa; /* Blue for email icon */
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar (Locked) -->
+    <nav class="bg-white shadow fixed-navbar">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-8">
+                    <a href="#" class="flex-shrink-0">
+                        <img src="https://kormikotabandungcom.b-cdn.net/2022/05/logo-kormi-kota-bandung.png" 
+                             alt="Site Logo" 
+                             class="w-[240px] h-[60px] object-contain">
+                    </a>
+                    <div class="flex space-x-8">
+                        <a href="#" class="text-gray-700 hover:text-blue-500">Home</a>
+                        <a href="#" class="text-gray-700 hover:text-blue-500">Tentang Kami</a>
+                        <a href="#" class="text-gray-700 hover:text-blue-500">Media</a>
+                        <a href="#" class="text-blue-500 font-medium">INORGA</a>
+                        <a href="#" class="text-gray-700 hover:text-blue-500">Artikel</a>
+                        <a href="#" class="text-gray-700 hover:text-blue-500">Kontak</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 pt-24">
+        <!-- Page Header (Centered Vertically) -->
+        <div class="flex flex-col items-start justify-center min-h-[100px]">
+            <!-- Adjust the min-h-[150px] value to change the vertical space around the title/subtitle -->
+            <h1 class="text-3xl font-bold mb-2">Ketahui INORGA</h1>
+            <p class="text-gray-600">Ketahui INORGA OKB (Organisasi Keolahragaan di Bawah KORMI) dan OKTB (Organisasi Keolahragaan Tidak di Bawah KORMI) lebih lanjut!</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex flex-col md:flex-row gap-6">
+            <!-- Left Side - Organization List -->
+            <div class="w-full md:w-1/3 bg-white rounded-lg shadow overflow-hidden flex flex-col">
+                <div class="p-4 border-b border-gray-200">
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search organizations..." 
+                               class="w-full p-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="p-4 flex space-x-4 border-b border-gray-200">
+                    <button id="categoryAll" class="px-6 py-3 rounded-lg font-medium active-category">Semua</button>
+                    <button id="categoryOKB" class="px-6 py-3 rounded-lg font-medium bg-gray-200">OKB</button>
+                    <button id="categoryOKTB" class="px-6 py-3 rounded-lg font-medium bg-gray-200">OKTB</button>
+                </div>
+                <div id="orgList" class="flex-1 overflow-y-auto" style="max-height: calc(100vh - 300px);">
+                    <!-- Organization cards will be inserted here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Right Side - Organization Details (Scrollable) -->
+            <div class="w-full md:w-2/3 bg-white rounded-lg shadow overflow-hidden">
+                <div id="orgDetails" class="p-6 scrollable-details relative">
+                    <div class="text-center py-20 text-gray-400">
+                        <i class="fas fa-building text-5xl mb-4"></i>
+                        <p>Select an organization to view details</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const organizations = {
+            categoryOKB: [
+                {
+                    id: 5,
+                    abbreviation: "PORPI",
+                    name: "Persatuan Olahraga Pernafasan Indonesia",
+                    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLQ-GlMd8DCyttr2TVkHVP6PXVLsiwxEAo1Q&s",
+                    detailImage: "https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/2023/01/21/3842441761.jpg",
+                    description: "Persatuan Olahraga Pernafasan Indonesia (PORPI) is an Indonesian sports organization focused on promoting breath control exercises and respiratory health through sports activities. Established to enhance physical fitness and well-being, PORPI organizes events and competitions that emphasize breathing techniques, often integrating traditional practices with modern fitness approaches. The organization aims to raise awareness about the importance of respiratory health, especially in combating respiratory illnesses and improving overall stamina. PORPI operates under the umbrella of KORMI (Komite Olahraga Rekreasi Masyarakat Indonesia) and collaborates with various health and sports communities across Indonesia to foster a culture of active living."
+                },
+                {
+                    id: 6,
+                    abbreviation: "PERWOSI",
+                    name: "Persatuan Wanita Olahraga Seluruh Indonesia",
+                    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8FFbr3TkUOgWOlyQwvhe795qqMnTJ3ITlQg&s",
+                    detailImage: "https://perwosi.org/myfile/img/gallery/gal_33.png",
+                    description: "Persatuan Wanita Olahraga Seluruh Indonesia (PERWOSI) is a nationwide organization dedicated to advancing women's participation in sports and recreational activities in Indonesia. Founded to empower women through physical fitness, PERWOSI encourages female athletes of all ages to engage in various sports, from traditional games to modern disciplines. As part of KORMI, it organizes events, workshops, and competitions aimed at promoting gender equality in sports, improving health, and building community among women. PERWOSI plays a vital role in breaking stereotypes and inspiring women to lead active, healthy lifestyles across the archipelago."
+                },
+                {
+                    id: 7,
+                    abbreviation: "YJI",
+                    name: "Yayasan Jantung Indonesia",
+                    logo: "https://yji.metrokota.go.id/wp-content/uploads/sites/79/2022/04/logo-2.png",
+                    detailImage: "https://dvgddkosknh6r.cloudfront.net/live/media/img/1726482326-IMG-20240915-WA0150.jpg",
+                    description: "Yayasan Jantung Indonesia (YJI) is a foundation focused on heart health awareness and cardiovascular fitness through sports and community programs. Established to combat heart disease—one of Indonesia’s leading health issues—YJI promotes activities like aerobic exercises, heart-healthy sports, and educational campaigns. Operating under KORMI, YJI collaborates with healthcare professionals and local communities to encourage regular physical activity and healthy lifestyles. Its initiatives include organizing heart health walks, fitness classes, and seminars to educate the public on preventing heart-related conditions."
+                },
+                {
+                    id: 8,
+                    abbreviation: "IODI",
+                    name: "Ikatan Olahraga Dancesport Indonesia",
+                    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLmftJTRkDlMCjrJhyivm-pc6KaN_Z-alBkw&s",
+                    detailImage: "https://cdn.antaranews.com/cache/1200x800/2021/11/23/20211123_103402.jpg",
+                    description: "Ikatan Olahraga Dancesport Indonesia (IODI) is the governing body for dancesport in Indonesia, promoting ballroom and Latin dance as competitive and recreational sports. Affiliated with KORMI, IODI organizes national and regional dancesport competitions, training programs, and workshops to develop talent and popularize the sport. Dancesport combines physical fitness with artistic expression, and IODI aims to elevate its status in Indonesia while fostering discipline, teamwork, and creativity among participants. The organization also represents Indonesia in international dancesport events."
+                },
+                {
+                    id: 9,
+                    abbreviation: "FOKBI",
+                    name: "Federasi Olahraga Kreasi Budaya Indonesia",
+                    logo: "https://www.konikotayogyakarta.or.id/storage/berkas-cabor/U3Ocib49zzftP0MHMyYZX18R4QXROiFBydFZFObs.png",
+                    detailImage: "https://image.kemenpora.go.id/images/content/2022/08/05/2390/7025Kemenpora-dan-FOKBI-Terus-Kolaborasi-Bangkitkan-Semangat-Olahraga-untuk-Masyarakat.jpg",
+                    description: "Federasi Olahraga Kreasi Budaya Indonesia (FOKBI) is an organization dedicated to preserving and promoting Indonesia’s cultural heritage through sports and creative physical activities. Under KORMI, FOKBI develops and popularizes traditional exercises like the Poco-Poco dance, blending cultural elements with modern fitness trends. It organizes festivals, competitions, and community events to encourage participation across all ages, aiming to strengthen national identity and promote health. FOKBI’s efforts have gained recognition for revitalizing traditional games and dances as competitive sports."
+                }
+            ],
+            categoryOKTB: [
+                {
+                    id: 10,
+                    abbreviation: "GSC",
+                    name: "Gowes Santai Cimahi",
+                    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT0euIgJW6JnzcWiPLC5XF4fziR-7qqYUTVA&s",
+                    detailImage: "https://peraknew.com/wp-content/uploads/2019/01/WhatsApp-Image-2019-01-20-at-09.40.24.jpeg",
+                    description: "Gowes Santai Cimahi (GSC) is a community-based cycling group in Cimahi, West Java, focused on promoting a relaxed, recreational approach to cycling. Not affiliated with KORMI, GSC organizes casual bike rides through scenic routes in and around Cimahi, encouraging physical activity and social bonding among enthusiasts. The group welcomes cyclists of all skill levels, fostering a laid-back environment where participants can enjoy nature, exercise, and community spirit. Regular events include group rides, charity cycles, and local meetups aimed at promoting a healthy lifestyle."
+                },
+                {
+                    id: 11,
+                    abbreviation: "ZTAA",
+                    name: "Zumba Taman Asia Afrika",
+                    logo: "https://i.pinimg.com/474x/ee/d8/52/eed852a8c2a5e34d4343d04d4d2effde.jpg",
+                    detailImage: "https://pict.sindonews.net/dyn/850/pena/news/2023/07/31/704/1164613/gaet-milenial-srikandi-ganjar-gelar-pound-fit-zumba-dan-color-party-nsp.jpg",
+                    description: "Zumba Taman Asia Afrika (ZTAA) is a local fitness community in Bandung that hosts Zumba classes in the Taman Asia Afrika park. Operating independently of KORMI, ZTAA brings together fitness enthusiasts for dance-based workouts set to lively music, promoting cardiovascular health and fun. The group’s open-air sessions attract a diverse crowd, offering an accessible way to stay active while enjoying the park’s ambiance. ZTAA emphasizes inclusivity, community engagement, and the joy of movement through regular classes and special events."
+                },
+                {
+                    id: 12,
+                    abbreviation: "KSC",
+                    name: "Komunitas Senam Ceria",
+                    logo: "https://png.pngtree.com/png-vector/20220529/ourlarge/pngtree-logo-sa2c-surya-artha-senam-aerobic-club-png-vektor-transparent-background-png-image_4764068.png",
+                    detailImage: "https://pin.or.id/main/wp-content/uploads/2017/04/Senam-Bersama2.jpg",
+                    description: "Komunitas Senam Ceria (KSC) is a grassroots exercise group in Indonesia that promotes cheerful, group-based aerobics and fitness routines. Independent from KORMI, KSC focuses on creating a joyful atmosphere through rhythmic exercises suitable for all ages, often held in public spaces like parks or community centers. The group’s mission is to boost physical and mental well-being through affordable, accessible workouts, fostering camaraderie and positivity among members. KSC frequently organizes free sessions and community fitness challenges."
+                },
+                {
+                    id: 13,
+                    abbreviation: "PSB",
+                    name: "Panahan Sunnah Bandung",
+                    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaPLGrN1CyV_btzlPD13KRl8qsR_yDtHZrtg&s",
+                    detailImage: "https://awsimages.detik.net.id/community/media/visual/2022/04/06/remaja-di-desa-kasilib-banjarnegara-ngabuburit-sambil-belajar-panahan_169.jpeg?w=1200",
+                    description: "Panahan Sunnah Bandung (PSB) is a Bandung-based archery community that practices traditional Islamic archery techniques, inspired by the Sunnah (Prophetic traditions). Operating outside KORMI’s structure, PSB emphasizes discipline, focus, and spiritual growth alongside physical skill development. The group trains enthusiasts in authentic archery methods using traditional bows, hosting regular practice sessions, workshops, and friendly competitions. PSB aims to preserve cultural and religious heritage while promoting archery as a holistic sport."
+                }
+            ]
+        };
+    
+        const orgList = document.getElementById('orgList');
+        const orgDetails = document.getElementById('orgDetails');
+        const searchInput = document.getElementById('searchInput');
+        const categoryAll = document.getElementById('categoryAll');
+        const categoryOKB = document.getElementById('categoryOKB');
+        const categoryOKTB = document.getElementById('categoryOKTB');
+    
+        let currentCategory = 'all';
+    
+        function renderOrgList(category, searchTerm = '') {
+            orgList.innerHTML = '';
+            let filteredOrgs = [];
+            if (category === 'all') {
+                filteredOrgs = [...organizations.categoryOKB, ...organizations.categoryOKTB];
+            } else {
+                filteredOrgs = organizations[category];
+            }
+            filteredOrgs = filteredOrgs.filter(org => 
+                org.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                org.abbreviation.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+    
+            filteredOrgs.forEach(org => {
+                const orgCard = document.createElement('div');
+                orgCard.className = 'p-4 border-b border-gray-200 org-card';
+                orgCard.innerHTML = `
+                    <div class="flex items-center">
+                        <img src="${org.logo}" alt="${org.name}" class="w-12 h-12 rounded object-cover mr-4">
+                        <div>
+                            <h4 class="font-semibold">${org.abbreviation}</h4>
+                            <p class="text-sm text-gray-600">${org.name}</p>
+                        </div>
+                    </div>
+                `;
+                orgCard.addEventListener('click', () => showOrgDetails(org));
+                orgList.appendChild(orgCard);
+            });
+        }
+    
+        function showOrgDetails(org) {
+            orgDetails.innerHTML = `
+                <div class="mb-6">
+                    <img src="${org.detailImage}" alt="${org.name} detail" class="w-full aspect-[21/9] object-cover rounded-lg">
+                </div>
+                <h2 class="text-2xl font-bold mb-2">${org.name}</h2>
+                <p class="text-gray-700 mb-20">${org.description}</p>
+                <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-10">
+                    <button class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 
+                                  text-white px-8 py-3 rounded-full floating-btn flex items-center transition-all duration-300
+                                  hover:shadow-lg">
+                        <i class="fas fa-phone-alt mr-2 text-green-300"></i>
+                        <i class="fas fa-envelope mr-2 text-blue-200"></i>
+                        Contact ${org.abbreviation}
+                    </button>
+                </div>
+            `;
+        }
+    
+        function setActiveCategory(activeBtn, ...inactiveBtns) {
+            activeBtn.classList.add('active-category');
+            activeBtn.classList.remove('bg-gray-200');
+            inactiveBtns.forEach(btn => {
+                btn.classList.remove('active-category');
+                btn.classList.add('bg-gray-200');
+            });
+            renderOrgList(currentCategory);
+            orgDetails.innerHTML = `
+                <div class="text-center py-20 text-gray-400">
+                    <i class="fas fa-building text-5xl mb-4"></i>
+                    <p>Select an organization to view details</p>
+                </div>
+            `;
+        }
+    
+        categoryAll.addEventListener('click', () => {
+            currentCategory = 'all';
+            setActiveCategory(categoryAll, categoryOKB, categoryOKTB);
+        });
+    
+        categoryOKB.addEventListener('click', () => {
+            currentCategory = 'categoryOKB';
+            setActiveCategory(categoryOKB, categoryAll, categoryOKTB);
+        });
+    
+        categoryOKTB.addEventListener('click', () => {
+            currentCategory = 'categoryOKTB';
+            setActiveCategory(categoryOKTB, categoryAll, categoryOKB);
+        });
+    
+        searchInput.addEventListener('input', (e) => {
+            renderOrgList(currentCategory, e.target.value);
+        });
+    
+        renderOrgList(currentCategory);
+    </script>
+</body>
+</html>
