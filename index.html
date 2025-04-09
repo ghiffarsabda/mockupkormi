@@ -114,16 +114,20 @@
             font-size: 1.5rem;
             color: #4b5563;
             cursor: pointer;
-            z-index: 10; /* Ensure close button is above content */
+            z-index: 10;
         }
         #modalDetails {
-            padding-top: 2rem; /* Add space for close button */
+            padding-top: 2rem;
         }
         #modalDetails .floating-btn-container {
             position: sticky;
             bottom: 1rem;
             text-align: center;
             padding: 1rem 0;
+        }
+        /* Line Spacing for Description */
+        .description-text {
+            line-height: 1.75; /* Adjust this value as needed */
         }
         @media (max-width: 767px) {
             #orgDetails {
@@ -353,7 +357,7 @@
                     <img src="${org.detailImage}" alt="${org.name} detail" class="w-full aspect-[21/9] object-cover rounded-lg">
                 </div>
                 <h2 class="text-2xl font-bold mb-2">${org.name}</h2>
-                <p class="text-gray-700 mb-20">${org.description}</p>
+                <p class="text-gray-700 description-text mb-20">${org.description}</p>
                 <div class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-10">
                     <button class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700
                                   text-white px-8 py-3 rounded-full floating-btn flex items-center transition-all duration-300
@@ -370,7 +374,7 @@
                     <img src="${org.detailImage}" alt="${org.name} detail" class="w-full aspect-[21/9] object-cover rounded-lg">
                 </div>
                 <h2 class="text-2xl font-bold mb-2">${org.name}</h2>
-                <p class="text-gray-700 mb-20">${org.description}</p>
+                <p class="text-gray-700 description-text mb-20">${org.description}</p>
                 <div class="floating-btn-container">
                     <button class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700
                                   text-white px-8 py-3 rounded-full floating-btn flex items-center transition-all duration-300
@@ -383,12 +387,10 @@
             `;
             
             if (window.innerWidth < 768) {
-                // Show modal on mobile
                 modalDetails.innerHTML = mobileHTML;
                 modalOverlay.classList.add('active');
                 document.body.classList.add('overflow-hidden');
             } else {
-                // Show in regular details panel on desktop
                 orgDetails.innerHTML = desktopHTML;
             }
         }
