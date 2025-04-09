@@ -45,7 +45,7 @@
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             z-index: 60;
             transition: transform 0.3s ease-in-out;
-            padding-top: 60px;
+            padding-top: 20px;
         }
         .mobile-nav.open {
             transform: translateX(250px);
@@ -68,6 +68,13 @@
             color: #4b5563;
             cursor: pointer;
         }
+        .mobile-nav-logo {
+            width: 150px;
+            height: 40px;
+            margin-left: 20px; /* Align to the left with padding */
+            margin-bottom: 20px;
+            display: block;
+        }
         .overlay {
             position: fixed;
             top: 0;
@@ -81,7 +88,6 @@
         .overlay.active {
             display: block;
         }
-        /* Modal Styles */
         #modalOverlay {
             position: fixed;
             top: 0;
@@ -125,9 +131,8 @@
             text-align: center;
             padding: 1rem 0;
         }
-        /* Line Spacing for Description */
         .description-text {
-            line-height: 1.75; /* Adjust this value as needed */
+            line-height: 1.75;
         }
         @media (max-width: 767px) {
             #orgDetails {
@@ -166,6 +171,9 @@
     </nav>
 
     <div id="mobileNav" class="mobile-nav">
+        <img src="https://kormikotabandungcom.b-cdn.net/2022/05/logo-kormi-kota-bandung.png"
+             alt="Mobile Nav Logo"
+             class="mobile-nav-logo object-contain">
         <div id="mobileNavLinks" class="mt-6">
             <a href="#">Home</a>
             <a href="#">Tentang Kami</a>
@@ -215,7 +223,6 @@
         </div>
     </div>
 
-    <!-- Modal for Mobile View -->
     <div id="modalOverlay">
         <div id="modalContent">
             <button id="modalClose" class="close-button focus:outline-none">
